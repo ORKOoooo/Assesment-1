@@ -1,0 +1,67 @@
+---
+title: "Assesment-1.1"
+author: "Ozan Aksut s4658715"
+date: "15/08/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# RMarkdown editing
+### Analyze. Share. Reproduce.
+### Your data tells a story. 
+* Tell it with R Markdown.* 
+**Turn your analyses into high quality** *documents, reports, presentations and dashboards.*
+
+
+
+[Rmarkdown](https://rmarkdown.rstudio.com/lesson-8.html)
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(janitor)
+```
+
+
+```{r}
+fastfood <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
+data %>% head(10)
+
+```
+
+```{r}
+knitr::kable(head(fastfood[1:5, 1:5]), "pipe")
+```
+
+
+```{r}
+fastfood %>%
+filter(calories>1000)
+
+```
+
+```{r}
+fastfood %>%
+ filter(total_fat>40 & total_carb>80)
+```
+
+```{r}
+dont_eat_this <- fastfood %>%
+   filter(total_fat>40 & total_carb>80)
+```
+
+```{r}
+mcdonalds <- fastfood %>% 
+  filter(restaurant == "Mcdonalds")
+```
+
+
+
+
+
+
+
+
