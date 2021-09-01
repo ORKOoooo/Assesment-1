@@ -1,7 +1,9 @@
+
+#1
 ---
 title: "Assesment-1.1"
 author: "Ozan Aksut s4658715"
-date: "15/08/2021"
+date: "01/09/2021"
 output: html_document
 ---
 
@@ -9,14 +11,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# RMarkdown editing
+#2
+# RMarkdown editing (Part 1)
+
+#3 & 4
 ### Analyze. Share. Reproduce.
 ### Your data tells a story. 
 * Tell it with R Markdown.* 
 **Turn your analyses into high quality** *documents, reports, presentations and dashboards.*
 
 
-
+#5
 [Rmarkdown](https://rmarkdown.rstudio.com/lesson-8.html)
 
 ```{r}
@@ -25,24 +30,26 @@ library(skimr)
 library(janitor)
 ```
 
-
+#6
 ```{r}
 fastfood <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-09-04/fastfood_calories.csv")
 data %>% head(10)
 
 ```
 
+#7
 ```{r}
 knitr::kable(head(fastfood[1:5, 1:5]), "pipe")
 ```
 
-
+#8
 ```{r}
 fastfood %>%
 filter(calories>1000)
 
 ```
 
+#9
 ```{r}
 fastfood %>%
  filter(total_fat>40 & total_carb>80)
@@ -53,10 +60,170 @@ dont_eat_this <- fastfood %>%
    filter(total_fat>40 & total_carb>80)
 ```
 
+#10
 ```{r}
 mcdonalds <- fastfood %>% 
   filter(restaurant == "Mcdonalds")
 ```
+
+
+
+#Part 2
+
+#11
+```{r}
+skim(fastfood)
+```
+
+#12
+```{r}
+fastfood %>%
+count(restaurant)
+```
+
+#13
+```{r}
+fastfood %>%
+  group_by(restaurant) %>%
+  summarise(mean(calories))
+```
+
+#14
+```{r}
+fastfood %>%
+  group_by(restaurant) %>%
+  summarise(average_callories=mean(calories))
+```
+
+#15
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(fastfood, aes(x = restaurant, y = total_fat)) +
+geom_point(colour = "blue")
+```
+
+#The display of data or information in a graph, chart, or other visual format is known as data visualisation. It uses pictures to convey data connections. This is significant since it makes it easier to see trends and patterns.
+
+#16
+```{r}
+max_total_fat <- fastfood %>%
+  group_by(restaurant) %>%
+  summarise(max_total_fat=max(total_fat))
+```
+
+
+#17
+```{r}
+ggplot(mcdonalds, aes(x = sugar, y = protein)) +
+  geom_point(color = "green")
+```
+
+# Part 3
+
+#18
+```{r}
+str(fastfood)
+```
+
+```{r}
+fastfood$restaurant <- as.factor(fastfood$restaurant)
+```
+
+#19
+```{r}
+calories_type <- cut_number(fastfood$calories, n = 3,labels=c("low", "med", "high"))
+```
+
+```{r}
+fastfood <- fastfood%>%
+mutate(calories_type = cut_number(fastfood$calories, n = 3,labels=c("low", "med", "high")))
+
+```
+
+#20
+```{r}
+fastfood %>%
+  count(restaurant, calories_type, sort = TRUE) %>%
+  ggplot(aes(restaurant, n, fill = calories_type)) +
+  geom_col() +
+  facet_wrap(calories_type~.)+
+  coord_flip() +
+  labs(x = "Restaurant Names", y = "Number of Restaurant", title = "Calories type for each restaurant", caption = "Image 1: Bar Graph") +
+  theme_test()
+```
+
+#21
+```{r}
+fastfood <-fastfood%>%
+group_by(restaurant) %>%
+  mutate(trans_fat_percent = trans_fat/total_fat * 10) %>%
+  relocate(trans_fat_percent, .after = restaurant)
+```
+
+
+#22
+```{r}
+fastfood %>% 
+ggplot(aes(restaurant, trans_fat, color = restaurant)) +
+  geom_violin() +
+  labs(x = "Restaurant Names", y = "Amount of Trans Fat", title = "Trans fat for each type of restaurant " ) +
+  theme_classic()
+
+```
+
+
+#23
+```{r}
+fastfood %>%
+  group_by(restaurant) %>%
+  summarise(total_fat=mean(total_fat))
+
+```
+
+
+#24
+
+```{r}
+ggplot(fastfood, aes(restaurant, total_fat, color = total_fat)) +
+  geom_jitter()+
+  labs(x = "Restaurant Names", y = "Amount of Total Fat", title = "Total fat for each type of restaurant " ) 
+  
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
